@@ -21,3 +21,6 @@ Upon running the Math Game program, you will be greeted with a welcome message a
 Here's an example of how the program may look during execution:
 
 ![image](https://github.com/Abdelrahman-Sweiti/Lab01/assets/102755704/8343959b-bc79-44b5-8249-f0b94d2d525e)
+
+## Time Taken:
+Hour and half and another hour fixing the Lab01 for new submission since the first submission were incorrect/not completed

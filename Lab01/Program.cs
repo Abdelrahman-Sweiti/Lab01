@@ -1,91 +1,111 @@
-﻿namespace Lab01
+﻿using System;
+
+namespace Numbers_Game
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            StartSequence();
+        }
+
+        static void StartSequence()
+        {
+            Console.WriteLine("welcome to my game! lets do some math!");
+            Console.WriteLine("please enter a number greater than zero");
+            string userInput = Console.ReadLine();
+
             try
             {
-                StartSequence();
+                int intUserInput = Convert.ToInt32(userInput);
+                int[] userArr = new int[intUserInput];
+                Populate(userArr);
+                int sum = GetSum(userArr);
+                int product = GetProduct(userArr, sum);
+                decimal quotient = GetQuotient(product);
+
+                Console.WriteLine($"\nYour array is size: {userArr.Length}");
+                Console.Write("The numbers in the array are: ");
+                for (int i = 0; i < userArr.Length; i++)
+                {
+                    Console.Write($"{userArr[i]}");
+                    if (i < userArr.Length - 1)
+                    {
+                        Console.Write(", ");
+                    }
+                }
+                Console.WriteLine($"\nThe sum of the array is: {sum}");
+                Console.WriteLine($"{sum} * {product / sum} = {product}");
+                Console.WriteLine($"{product} / {product / quotient} = {quotient}");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Invalid input format. Please enter a valid integer.");
+            }
+            catch (OverflowException ex)
+            {
+                Console.WriteLine("Input exceeds the valid range of integers.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine("An error occurred: " + ex.Message);
             }
             finally
             {
-                Console.WriteLine("Program completed.");
+                Console.WriteLine("Program is complete.");
             }
         }
 
-        public static void StartSequence()
+        static void Populate(int[] userArr)
         {
-            Console.WriteLine("Please enter a number greater than 0");
-            string number = Console.ReadLine();
-            int convertedNumber = Convert.ToInt32(number);
-
-            int[] arraySize = new int[convertedNumber];
-
-            Populate(arraySize);
-
-            int sum = GetSum(arraySize);
-            int product = GetProduct(arraySize);
-            Console.WriteLine("enter a number to divide the array on");
-            string DividedNumber = Console.ReadLine();
-            int converted = Convert.ToInt32(DividedNumber);
-            int quotient = GetQuotient(product, converted);
-
-            Console.WriteLine($"Sum: {sum}");
-            Console.WriteLine($"Product: {product}");
-            Console.WriteLine($"Quotient: {quotient}");
-        }
-
-        public static void Populate(int[] array)
-        {
-
-
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < userArr.Length; i++)
             {
-                Console.WriteLine($"Please enter the value for the array at index {i}");
-                string inputValue = Console.ReadLine();
-                array[i] = Convert.ToInt32(inputValue);
+                Console.WriteLine($"Please enter number {i + 1} of {userArr.Length}:");
+                string userInput = Console.ReadLine();
+                userArr[i] = Convert.ToInt32(userInput);
             }
         }
 
-        static int GetSum(int[] array)
+        static int GetSum(int[] userArr)
         {
             int sum = 0;
-
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < userArr.Length; i++)
             {
-                sum = sum + array[i];
+                sum += userArr[i];
             }
-
+            if (sum < 20)
+                throw new Exception($"Value of sum: {sum} is too low");
             return sum;
         }
 
-        static int GetProduct(int[] array)
+        static int GetProduct(int[] userArr, int sum)
         {
-            int product = 1;
-
-            for (int i = 0; i < array.Length; i++)
+            Console.WriteLine($"\nPlease select a random number between 1 and {userArr.Length}:");
+            string userInput = Console.ReadLine();
+            int randomNumber = Convert.ToInt32(userInput);
+            if (randomNumber < 1 || randomNumber > userArr.Length)
             {
-                product = product * array[i];
+                throw new IndexOutOfRangeException("Invalid random number selection");
             }
-
+            int product = sum * userArr[randomNumber - 1];
             return product;
         }
 
-        static int GetQuotient(int product, int divisor)
+        static decimal GetQuotient(int product)
         {
-            if (divisor == 0)
+            Console.WriteLine($"\nPlease enter a number to divide your product {product} by:");
+            string userInput = Console.ReadLine();
+            int dividend = Convert.ToInt32(userInput);
+            try
             {
-                throw new DivideByZeroException("Cannot divide by zero.");
+                decimal quotient = decimal.Divide(product, dividend);
+                return quotient;
             }
-
-            int quotient = product / divisor;
-
-            return quotient;
+            catch (DivideByZeroException ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return 0;
+            }
         }
     }
 }
